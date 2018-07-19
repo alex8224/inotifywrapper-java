@@ -7,3 +7,16 @@ So I wrote this project.
 
 The wrapper support all inotifytools features.I think is awesome.
 
+
+## requirements
+
+1. inotifytools and libinotifytools-dev
+2. JNA
+
+
+## compile
+
+```
+gcc -o /usr/lib/libinotifywrapper.so inotifywrapper.c  -fPIC -shared -linotifytools
+mvn assembly:assembly
+```
