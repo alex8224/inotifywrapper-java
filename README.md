@@ -17,6 +17,6 @@ The wrapper support all inotifytools features.I think is awesome.
 ## compile
 
 ```
-gcc -o /usr/lib/libinotifywrapper.so inotifywrapper.c  -fPIC -shared -linotifytools
+gcc -fPIC -shared -o libinotifywrapper.so inotifywrapper.c -linotifytools
 mvn assembly:assembly
 ```

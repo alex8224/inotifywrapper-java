@@ -14,7 +14,8 @@ import java.util.Arrays;
 
 public class App 
 {
-	public static int IN_CLOSE_WRITE = 0x00000008;
+	public static long IN_CLOSE_WRITE = 0x00000008;
+
 
 	public interface InotifyWrapper extends Library {
 
@@ -22,66 +23,20 @@ public class App
 			void invoke(String basedir, String filename, long evtname);
 		}
 
-		// define an implementation of the callback interface
 		public static class InotifyEventListenerImpl implements InotifyEventListener{
 			@Override
 			public void invoke(String basedir, String filename, long evtname) {
-				System.out.println(String.format("%s%s, evt is :%x", basedir, filename, evtname));
+				System.out.println(String.format("%s%s, evt is :0x%06x", basedir, filename, evtname));
 			}
 		}
 
-		public int startInotify(String root, InotifyEventListener listener);
+		public int startInotify(String root, long eventmask, InotifyEventListener listener);
 	}
-
-	public interface INotifyLibrary extends Library {
-		//boolean isWindows = Platform.isWindows();
-		INotifyLibrary INSTANCE = Native.loadLibrary("inotifytools",INotifyLibrary.class);
-
-
-		public class Uint extends IntegerType {
-
-			public Uint() {
-				super(4, true);
-			}
-		}
-
-		public static class InotifyEvent1 extends Structure{
-
-			public static class ByReference extends InotifyEvent1 implements Structure.ByReference {}
-			public int wd;
-			public long mask;
-			public long cookie;
-			public long len;
-			public Pointer name;
-
-
-			protected List<String> getFieldOrder() {
-				return Arrays.asList(new String[]{"wd","mask","cookie","len","name"});
-			}
-		};
-
-		public static class InotifyEvent extends PointerType {
-			public InotifyEvent(Pointer address){
-				super(address);
-			}
-
-			public InotifyEvent() {
-				super();
-			}
-		};
-
-		int inotifytools_initialize();
-		int inotifytools_watch_recursively(String root, int events );
-		void inotifytools_set_printf_timefmt(String fmt);
-		void inotifytools_printf(InotifyEvent1 event, String fmt);
-		void inotifytools_sprintf(Pointer out, InotifyEvent1 event, String fmt);
-		InotifyEvent1.ByReference inotifytools_next_event(long timeout);
-
-	}
+	
 	public static void main( String[] args )
 	{
         final InotifyWrapper wrapper = Native.loadLibrary("inotifywrapper", InotifyWrapper.class);
         final InotifyWrapper.InotifyEventListenerImpl listener = new InotifyWrapper.InotifyEventListenerImpl();
-        wrapper.startInotify(args[0], listener);
+        wrapper.startInotify(args[0], IN_CLOSE_WRITE, listener);
 	}
 }
