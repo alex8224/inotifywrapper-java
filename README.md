@@ -13,10 +13,20 @@ The wrapper support all inotifytools features.I think is awesome.
 1. inotifytools and libinotifytools-dev
 2. JNA
 
+```
+yum install epel-release
+yum install inotify-tools-devel.x86_64
 
+```
 ## compile
 
 ```
 gcc -fPIC -shared -o libinotifywrapper.so inotifywrapper.c -linotifytools
 mvn assembly:assembly
+```
+
+## usage 
+
+```
+env LD_LIBRARY=$(pwd) java -jar inotify-java-wrapper-0.1-with-dependencies.jar $(pwd)
 ```
